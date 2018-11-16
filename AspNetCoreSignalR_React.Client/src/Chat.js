@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { HubConnection } from '@aspnet/signalr-client';
+import { HubConnection, HubConnectionBuilder } from '@aspnet/signalr';
+import * as signalR from '@aspnet/signalr';
 
 class Chat extends Component {
   constructor(props) {
@@ -16,13 +17,24 @@ class Chat extends Component {
   componentDidMount = () => {
     const nick = window.prompt('Your name:', 'John');
 
-    const hubConnection = new HubConnection('http://localhost:5000/chat');
+    //const hubConnection = new HubConnection('http://localhost:5000/chat');
+      const hubConnection = new signalR.HubConnectionBuilder()
+          .withUrl("http://localhost:5000/chathub")
+          .configureLogging(signalR.LogLevel.Debug)
+          .build();
+      hubConnection.start().catch(err => {
+          console.error(err.toString());
+          console.dir(err);
+      });
 
     this.setState({ hubConnection, nick }, () => {
-      this.state.hubConnection
+      /*this.state.hubConnection
         .start()
         .then(() => console.log('Connection started!'))
-        .catch(err => console.log('Error while establishing connection :('));
+          .catch(err => {
+              console.log('Error while establishing connection :(');
+              console.dir(err);
+          });*/
 
       this.state.hubConnection.on('sendToAll', (nick, receivedMessage) => {
         const text = `${nick}: ${receivedMessage}`;

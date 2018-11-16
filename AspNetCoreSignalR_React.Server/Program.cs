@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 
-namespace AspNetCoreSignalR_React.Server
+namespace SignalRChat.Hubs
 {
     public class Program
     {
